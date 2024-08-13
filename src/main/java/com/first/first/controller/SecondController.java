@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.first.first.Dto.SecondDto;
+import com.first.first.Exception.UserNotFoundException;
 import com.first.first.entity.SecondEntity;
 import com.first.first.service.SecondService;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -41,6 +41,11 @@ public class SecondController {
     @PutMapping("/")
     public SecondEntity updateSecond(@RequestBody SecondDto secondDto) {
         return secondService.updateSecondEntity(secondDto);
+    }
+
+    @GetMapping("/getSecondStr")
+    public String getSecondStr() {
+        throw new UserNotFoundException("User not found");
     }
 
 }

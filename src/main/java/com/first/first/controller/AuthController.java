@@ -1,5 +1,6 @@
 package com.first.first.controller;
 
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -10,8 +11,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.first.first.Dto.AuthenticationRequest;
+import com.first.first.Exception.UserCredentialException;
 import com.first.first.Utils.JwtUtils;
 
 @RequestMapping("/api/v1")
@@ -29,11 +30,17 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<String> createTokEntity(
             @RequestBody AuthenticationRequest authenticationRequest) {
-        Authentication authentication =
-                authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-                        authenticationRequest.getUsername(), authenticationRequest.getPassword()));
-        UserDetails details = (UserDetails) authentication.getPrincipal();
-        String jwt = jwtUtils.generateToken(details);
+
+        String jwt = "";
+        try {
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(authenticationRequest.getUsername(),
+                            authenticationRequest.getPassword()));
+            UserDetails details = (UserDetails) authentication.getPrincipal();
+            jwt = jwtUtils.generateToken(details);
+        } catch (AuthenticationException ex) {
+            throw new UserCredentialException("User Credentails are invalid");
+        }
 
         return ResponseEntity.ok(jwt);
     }
