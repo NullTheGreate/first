@@ -22,9 +22,12 @@ public class SecondServiceImpl implements SecondService {
 
         List<Integer> list = List.of(1, 2, 3, 4, 5);
 
-        ThreadLogic logic = new ThreadLogic(list, memoryBean);
-        Thread thread = new Thread(logic);
-        thread.start();
+        for (int i = 0; i < 1000000; i++) {
+            ThreadLogic logic = new ThreadLogic(list, memoryBean);
+            Thread thread = new Thread(logic);
+            thread.setName(i + "");
+            thread.start();
+        }
         return "Hello Second";
     }
 

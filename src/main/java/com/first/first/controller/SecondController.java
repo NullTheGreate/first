@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 @RequestMapping("/second")
 public class SecondController {
     
-    @Autowired
     private SecondService secondService;
 
     public SecondController(SecondService secondService) {

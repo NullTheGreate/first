@@ -3,11 +3,14 @@ package com.first.first.thread;
 import java.lang.management.MemoryMXBean;
 import java.lang.management.MemoryPoolMXBean;
 import java.lang.management.MemoryUsage;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ThreadLogic implements Runnable {
     
     private List<Integer> list;
+
+    private List<String> strList;
 
     private MemoryMXBean mBean;
 
@@ -25,10 +28,13 @@ public class ThreadLogic implements Runnable {
         //     System.out.println(val * 123);
         //     System.out.println(val + " " + Thread.currentThread().getName());
         // });
-
+        strList = new ArrayList<String>();
         for (int i = 0; i < 10; i++) {
             System.out.println(i + " " + Thread.currentThread().getName());
             System.out.println(Thread.currentThread().getPriority());
+            for (int x = 0; x < 1000; x++) {
+                strList.add(x + " - " + x + " - " + Thread.currentThread().getName());
+            }
             pollMemory(this.mBean);
             try {
                 Thread.sleep(100);
@@ -38,7 +44,8 @@ public class ThreadLogic implements Runnable {
         }
     }
 
-     private static void pollMemory(MemoryMXBean memoryBean) {
+    private static void pollMemory(MemoryMXBean memoryBean) {
+        memoryBean.setVerbose(true);
         MemoryUsage heapMemoryUsage = memoryBean.getHeapMemoryUsage();
         MemoryUsage nonHeapMemoryUsage = memoryBean.getNonHeapMemoryUsage();
         
